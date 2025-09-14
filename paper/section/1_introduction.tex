@@ -1,0 +1,19 @@
+\section{INTRODUCTION}
+
+Reinforcement learning (RL) learns policy that maximize rewards through trial and error.
+This way of learning the desired behaviors may seem simple and straightforward, but it is highly effective.
+Over the past few years, RL has demonstrated impressive achievements in diverse applications ... \cite{silver2017mastering} \cite{andrychowicz2020learning} \cite{ouyang2022training}.
+Nevertheless, deploying RL in physical real-world environments remains a major challenge.
+To deploy RL-trained agents in real-world environments, two requirements must be satisfied:
+\textcolor{red}{First}, the ability to successfully accomplish the given tasks, and second, the safety and reliability of the learned agent.
+In standard RL, such requirements are learned exclusively from reward signals, thereby necessitating careful reward engineering.
+However, even with carefully designed rewards and successful training in simulation, the learned policy may fail when tasks change or when transferring to real-world environments, due to issues such as reward hacking or lack of generalization \cite{amodei2016concrete}.
+To address these issues, constrained reinforcement learning (constrained RL) has recently been widely studied.
+
+Constrained RL is a method that learns policy maximizing rewards while satisfying constraints, thus enabling agents to behave safely while successfully performing tasks.
+A common formulation of constrained RL specifies constraints at the trajectory level \cite{brunke2022safe}.
+As a result, since the constraints are specified over entire trajectory, violations occurring at individual timesteps cannot be directly \textcolor{red}{constrained/restricted.}
+For example, even if a constraint is defined to limit the number of lane departures during the entire trip of an autonomous vehicle, a single deviation from the lane that results in a collision with another vehicle can lead to a catastrophic failure.
+This illustrates that trajectory-level constraints regulate only the outcome of a task \textcolor{red}{but are limited in controlling the risky process itself.}
+Therefore, in this paper, we propose an approach that considers state-wise constraints.
+Specifically, we extend the Lagrangian-based approach, a representative method in constrained RL, by introducing state-wise Lagrange multipliers so that the policy is encouraged to take safe actions at every timestep.
