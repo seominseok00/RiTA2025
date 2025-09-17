@@ -31,15 +31,16 @@ In a SCMDP, the set of feasible policies $\Pi_{SC}$ is defined as:
 \begin{equation} \label{eq:feasible_policy_set_scmdp}
     \begin{aligned}    
         \Pi_{SC} = \{ \pi \in \Pi: &\; \forall (s_t, a_t, s_{t + 1}) \sim \tau, \\
-                                &\; \forall i, C_i(s_t, a_t, s_{t + 1}) \leq d_i \}
+                                &\; \forall i, C_i(s_t, a_t, s_{t + 1}) \leq w_i \}
     \end{aligned}
 \end{equation}
-where $C_i(s_t, a_t, s_{t + 1})$ is the cost incurred at state $s_t$ after taking action $a_t$ and transitioning to state $s_{t + 1}$, and $d_i$ is the corresponding threshold.
+where $C_i(s_t, a_t, s_{t + 1})$ is the cost incurred at state $s_t$ after taking action $a_t$ and transitioning to state $s_{t + 1}$, and $w_i$ is the corresponding threshold.
 Similar to CMDPs, the optimization problem in SCMDPs can be formulated as
 \begin{equation} \label{eq:scmdp_optimization_problem}
-    \pi^* = \arg\max_\pi J_R(\pi) \; \text{s.t.} \; J_{SC}(\pi) \leq d ,
+    \pi^* = \arg\max_\pi J_R(\pi) \; \text{s.t.} \; J_{SC}(\pi) \leq w ,
 \end{equation}
-where $J_{SC}(\pi)$ denotes the state-wise constraints.  % TODO: define $J_{SC}(\pi)$
+where $J_{SC}(\pi) = \mathbb{E}_{(s_t, a_t, s_{t + 1}) \sim \tau, \tau \sim \pi} [C(s_t, a_t, s_{t + 1})]$ denotes the state-wise constraints.  % TODO: define $J_{SC}(\pi)$
+% refrence: https://arxiv.org/pdf/2306.12594
 
 \subsubsection{Lagrangian Relaxation for Constrained Policy Optimization}
 
@@ -87,7 +88,7 @@ Therefore, we employ a neural network to \textcolor{red}{estimate/approximate} s
 The state-wise Lagrange multiplier network is parameterized by $\xi$ and takes the state $s$ as input, outputting the corresponding Lagrange multiplier $\lambda_\xi(s)$.
 The parameters of the Lagrange multiplier network are updated according to
 \begin{equation}
-    \lambda_\xi(s) \leftarrow \lambda_\xi(s) + \beta(\hat{J}_{SC} - d)
+    J_\lambda(\xi) = \mathbb{E}_{(s_t, a_t, s_{t + 1}) \sim \tau, \tau \sim \pi_{\theta_\text{old}}} [\lambda_\xi(s_t) (C(s_t, a_t, s_{t + 1}) - w)]
 \end{equation}
-where $\hat{J}_{SC}$ is the empirical estimate of the state-wise constraint, and $d$ is the threshold.
-In this update rule, the network's output increases when the constraint is violated ($\hat{J}_{SC} > d$) and decreases when the constraint is satisfied ($\hat{J}_{SC} < d$).
+where $w$ is the state-wise constraint threshold. 
+In this formulation, the objective $J_\lambda(\xi)$ drives the multiplier $\lambda_\xi(s)$ to increase when the observed cost $C(s_t, a_t, s_{t+1})$ exceeds the threshold $w$, and to decrease when it falls below $w$.
