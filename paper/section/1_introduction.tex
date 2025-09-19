@@ -1,19 +1,25 @@
 \section{INTRODUCTION}
 
-Reinforcement learning (RL) learns policy that maximize rewards through trial and error.
-This way of learning the desired behaviors may seem simple and straightforward, but it is highly effective.
-Over the past few years, RL has demonstrated impressive achievements in diverse applications \cite{silver2017mastering} \cite{andrychowicz2020learning} \cite{ouyang2022training}.
+Reinforcement learning (RL) learns a policy that maximizes rewards through trial and error.
+Learning in this manner may look very simple and straightforward, yet it is highly effective.
+This effectiveness has been clearly demonstrated in practice.
+Over the past few years, RL has demonstrated impressive achievements in diverse applications \cite{silver2017mastering}, \cite{andrychowicz2020learning}, \cite{schrittwieser2020mastering}, \cite{ouyang2022training}.
 Nevertheless, deploying RL in physical real-world environments remains a major challenge.
 To deploy RL-trained agents in real-world environments, two requirements must be satisfied:
-\textcolor{red}{First}, the ability to successfully accomplish the given tasks, and second, the safety and reliability of the learned agent.
+\textcolor{red}{First}, the agent must be able to successfully accomplish the given tasks, and second, it must ensure safety and reliability.
 In standard RL, such requirements are learned exclusively from reward signals, thereby necessitating careful reward engineering.
-However, even with carefully designed rewards and successful training in simulation, the learned policy may fail when tasks change or when transferring to real-world environments, due to issues such as reward hacking or lack of generalization \cite{amodei2016concrete}.
-To address these issues, constrained reinforcement learning (constrained RL) has recently been widely studied.
+However, reward engineering is inherently difficult, and even with carefully designed rewards, the learned policy may exploit unintended loopholes (reward hacking) or remain hard to interpret, making it difficult to ensure safety and reliability \cite{amodei2016concrete}.
+These limitations highlight the necessity of an explicit constraint function, separated from the reward, which has motivated research on constrained reinforcement learning (constrained RL).
 
-Constrained RL is a method that learns policy maximizing rewards while satisfying constraints, thus enabling agents to behave safely while successfully performing tasks.
+Constrained RL is a method that learns a policy to maximize rewards while satisfying constraints, thus enabling agents to behave safely while successfully performing tasks.
 A common formulation of constrained RL specifies constraints at the trajectory level \cite{brunke2022safe}.
-As a result, since the constraints are specified over entire trajectory, violations occurring at individual timesteps cannot be directly \textcolor{red}{constrained/restricted.}
-For example, even if a constraint is defined to limit the number of lane departures during the entire trip of an autonomous vehicle, a single deviation from the lane that results in a collision with another vehicle can lead to a catastrophic failure.
-This illustrates that trajectory-level constraints regulate only the outcome of a task \textcolor{red}{but are limited in controlling the risky process itself.}
-Therefore, in this paper, we propose an approach that considers state-wise constraints.
-Specifically, we extend the Lagrangian-based approach, a representative method in constrained RL, by introducing state-wise Lagrange multipliers so that the policy is encouraged to take safe actions at every timestep.
+While such a formulation ensures that the overall constraint is satisfied, violations can still occur at individual states.
+Importantly, even a single violation may sometimes lead to severe consequences.
+For example, while a trajectory-level constraint might successfully restrict the total number of lane departures during a trip, a single deviation at a critical moment---such as near another vehicle---can nevertheless lead to catastrophic failures.
+This limitation highlights the need to consider state-wise constrained RL, which explicitly enforces constraints at the level of individual states.
+Accordingly, we extend the Lagrangian-based approach, a representative method in constrained RL, by introducing state-wise Lagrange multipliers, encouraging the policy to satisfy safety requirements at every timestep.Our contributions are as follows:
+\begin{itemize}
+    \item[$\bullet$] We leverage neural networks to estimate state-wise Lagrange multipliers, enabling the policy to satisfy state-wise constraints more effectively.
+    \item[$\bullet$] We demonstrate that the proposed method allows for finer specification of constraints and achieves better constraint satisfaction compared to existing constrained RL approaches under the same training budget.
+    \item[$\bullet$] We show that the learned Lagrange multiplier network can be utilized at deployment time to assess state-wise safety, providing interpretability and insight into the agent’s behavior.
+\end{itemize}
