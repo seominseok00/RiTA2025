@@ -6,20 +6,23 @@ This effectiveness has been clearly demonstrated in practice.
 Over the past few years, RL has demonstrated impressive achievements in diverse applications \cite{silver2017mastering}, \cite{andrychowicz2020learning}, \cite{schrittwieser2020mastering}, \cite{ouyang2022training}.
 Nevertheless, deploying RL in physical real-world environments remains a major challenge.
 To deploy RL-trained agents in real-world environments, two requirements must be satisfied:
-\textcolor{red}{First}, the agent must be able to successfully accomplish the given tasks, and second, it must ensure safety and reliability.
+\textcolor{red}{first}, the agent must be able to successfully accomplish the given tasks, and second, it must ensure safety and reliability.
 In standard RL, such requirements are learned exclusively from reward signals, thereby necessitating careful reward engineering.
 However, reward engineering is inherently difficult, and even with carefully designed rewards, the learned policy may exploit unintended loopholes (reward hacking) or remain hard to interpret, making it difficult to ensure safety and reliability \cite{amodei2016concrete}.
-These limitations highlight the necessity of an explicit constraint function, separated from the reward, which has motivated research on constrained reinforcement learning (constrained RL).
+These limitations highlight the necessity of an explicit constraint function, separated from the reward, which has motivated research on constrained RL.
 
 Constrained RL is a method that learns a policy to maximize rewards while satisfying constraints, thus enabling agents to behave safely while successfully performing tasks.
-A common formulation of constrained RL specifies constraints at the trajectory level \cite{brunke2022safe}.
-While such a formulation ensures that the overall constraint is satisfied, violations can still occur at individual states.
-Importantly, even a single violation may sometimes lead to severe consequences.
-For example, while a trajectory-level constraint might successfully restrict the total number of lane departures during a trip, a single deviation at a critical moment---such as near another vehicle---can nevertheless lead to catastrophic failures.
-This limitation highlights the need to consider state-wise constrained RL, which explicitly enforces constraints at the level of individual states.
-Accordingly, we extend the Lagrangian-based approach, a representative method in constrained RL, by introducing state-wise Lagrange multipliers, encouraging the policy to satisfy safety requirements at every timestep.Our contributions are as follows:
+A common formulation of constrained RL specifies constraints in terms of the expected cumulative cost \cite{brunke2022safe}.
+For instance, in a driving scenario, a constraint may be to minimize unintended lane intrusions (i.e., crossing into an adjacent lane), in which case the cumulative cost can be defined as the total number of lane intrusions.
+In this way, the agent can satisfy the constraint in expectation and keep the total number of intrusions within an acceptable limit.
+However, even a single violation at the level of an individual state---such as an unintended lane intrusion near another vehicle at a critical moment---may nevertheless lead to accidents or catastrophic failures.
+
+This limitation highlights the need to consider \textcolor{red}{state-wise constraints}, which explicitly enforces constraints at the level of individual states.  % state-wise constraints(costs)를 논문에서 일관성 있게 사용
+\textcolor{red}{Accordingly, we introduce state-wise Lagrange multipliers to encourage the policy to satisfy safety requirements at every timestep.}
+Our contributions are as follows:
 \begin{itemize}
-    \item[$\bullet$] We leverage neural networks to estimate state-wise Lagrange multipliers, enabling the policy to satisfy state-wise constraints more effectively.
-    \item[$\bullet$] We demonstrate that the proposed method allows for finer specification of constraints and achieves better constraint satisfaction compared to existing constrained RL approaches under the same training budget.
-    \item[$\bullet$] We show that the learned Lagrange multiplier network can be utilized at deployment time to assess state-wise safety, providing interpretability and insight into the agent’s behavior.
+    \item[$\bullet$] In contrast to most existing methods that utilize a single Lagrange multiplier for cumulative cost constraints, our approach addresses state-wise constraints, which inherently demand state-wise multipliers.
+    To this end, neural networks are utilized to approximate these multipliers, enabling adaptive enforcement of safety at the level of individual states.
+    \item[$\bullet$] The proposed method allows for finer specification of constraints and achieves better constraint satisfaction compared to existing constrained RL approaches under the same training budget.
+    \item[$\bullet$] The learned Lagrange multiplier network can be utilized during deployment to assess state-wise safety, providing interpretability and insight into the agent’s behavior.
 \end{itemize}

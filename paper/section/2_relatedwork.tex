@@ -1,11 +1,13 @@
 \section{Related Work}
 
 In the context of constrained RL, Liu et al. \cite{liu2021policy} discuss various formulations in the CMDP setting and introduce corresponding model-free approaches.
-Among representative methods, constrained policy optimization (CPO) \cite{achiam2017constrained}, surrogate functions are used to approximate both the objective and the constraints, and a projection step is employed to enforce constraint satisfaction.
+Most existing works focus on enforcing constraints defined in terms of the discounted cumulative cost.
+Among representative methods is constrained policy optimization (CPO) \cite{achiam2017constrained}, which uses surrogate functions to approximate both the objective and the constraints, and employs a projection step to enforce constraint satisfaction.
 This procedure requires a backtracking line search, which makes the algorithm computationally expensive.
-Another line of work includes PPO Lagrangian and TRPO Lagrangian \cite{ray2019benchmarking}, which extend the PPO \cite{schulman2017proximal} and TRPO \cite{schulman2015trust} algorithms to the constrained RL setting through Lagrangian relaxation, reformulating the constrained policy optimization problem as an unconstrained max-min optimization problem.
+Another line of work includes Proximal Policy Optimization (PPO) Lagrangian and Trust Region Policy Optimization (TRPO) Lagrangian \cite{ray2019benchmarking}, which extend the PPO \cite{schulman2017proximal} and TRPO \cite{schulman2015trust} algorithms to the constrained RL setting through Lagrangian relaxation, reformulating the constrained policy optimization problem as an unconstrained max-min optimization problem.
 By adaptively adjusting the Lagrange multiplier, these methods encourage policy updates toward satisfying the constraints.
 However, since constraint violations are necessary for learning a safe policy, the constraints are typically not satisfied during training.
 In interior-point policy optimization (IPO) \cite{liu2020ipo}, logarithmic barrier functions are added to the objective as penalty terms to account for the constraints.
+% survey 논문에서도 IPO라고 언급
 While this approach is easy to implement and can handle multiple constraints, it assumes feasible iterates, which can be problematic in situations such as random agent initialization where constraint violations may occur.
 Stooke et al. \cite{stooke2020responsive} demonstrate that in Lagrangian-based methods, the Lagrange multiplier is updated only through integral control, resulting in oscillation and overshoot issues, and proposea a method that incorporates proportional and derivate terms to stabilize the updates.
