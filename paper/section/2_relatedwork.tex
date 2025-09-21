@@ -10,4 +10,4 @@ However, since constraint violations are necessary for learning a safe policy, t
 In interior-point policy optimization (IPO) \cite{liu2020ipo}, logarithmic barrier functions are added to the objective as penalty terms to account for the constraints.
 % survey 논문에서도 IPO라고 언급
 While this approach is easy to implement and can handle multiple constraints, it assumes feasible iterates, which can be problematic in situations such as random agent initialization where constraint violations may occur.
-Stooke et al. \cite{stooke2020responsive} demonstrate that in Lagrangian-based methods, the Lagrange multiplier is updated only through integral control, resulting in oscillation and overshoot issues, and proposea a method that incorporates proportional and derivate terms to stabilize the updates.
+Stooke et al. \cite{stooke2020responsive} demonstrate that in Lagrangian-based methods, the Lagrange multiplier is updated only through integral control, resulting in oscillation and overshoot issues, and propose a method that incorporates proportional and derivative terms to stabilize the updates.

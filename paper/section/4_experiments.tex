@@ -1,18 +1,19 @@
 \section{Experiments}
 
-We evaluate our approach in the Safety Gymnasium \cite{ji2023safety} environment, \textcolor{red}{focusing on the \texttt{PointGoal} task under different cost limits.}
+We evaluate our approach in the Safety Gymnasium \cite{ji2023safety} environment, focusing on the \texttt{PointGoal} task under different cost limits.
 Safety Gymnasium provides two cost definitions, a binary indicator and object-specific values, and the object-specific cost (\texttt{constrain\_indicator=False}) is adopted in all experiments.
 The proposed approach is evaluated in terms of constraint satisfaction performance by comparing it with CPO \cite{achiam2017constrained}, PPO Lagrangian \cite{ray2019benchmarking}, IPO \cite{liu2020ipo}, and CPPO \cite{stooke2020responsive}, using the implementations provided by Omnisafe \cite{ji2024omnisafe}.
 
-\subsection{\textcolor{red}{Results}}
+\subsection{Results}
 
-Figures.~\ref{fig:point_goal_results_vertical1} and \ref{fig:point_goal_results_vertical2} present the results under different cost limits.
+Figures~\ref{fig:point_goal_results_vertical1} and \ref{fig:point_goal_results_vertical2} present the results under different cost limits.
 Each figure shows how return, cost return, and the Lagrange multiplier evolve during training, highlighting how varying cost limits affect the agent's performance and constraint satisfaction.
-Since all methods except ours define the constraint in terms of cumulative cost, \textcolor{red}{the threshold for our method was set to 1/1000 of theirs (as each episode consists of 1,000 steps).}
+Since all methods except ours define the constraint in terms of cumulative cost, the threshold for our method was set to 1/1000 of theirs (as each episode consists of 1,000 steps).
 From Fig.~\ref{fig:point_goal_results_vertical1} (e) and Fig.~\ref{fig:point_goal_results_vertical2} (b), (e), it can be observed that our proposed method consistently satisfies the constraints across different settings, unlike the other methods.
 When the constraint is enforced too strictly to be satisfied, as in Fig.~\ref{fig:point_goal_results_vertical1} (b), none of the methods can satisfy it, but our proposed method still achieves the lowest cost return among them.
-Fig.~\ref{fig:point_goal_results_vertical1} (d) shows that the reward performance is lower than some of the other methods. 
-While the compared approaches enforce constraints defined on cumulative cost return, our method imposes state-wise cost constraints, which drive the policy to converge in a more local and conservative manner. 
+In particular, as shown in Fig.~\ref{fig:point_goal_results_vertical1} (a) and (b), our method achieves a similar level of constraint satisfaction as CPO, while obtaining more than twice the return performance.
+However, Fig.~\ref{fig:point_goal_results_vertical1} (d) suggests that the reward performance can be lower than that of some of the other methods.
+This is due to the use of state-wise cost constraints in our method, unlike the compared approaches that enforce constraints defined on cumulative cost return, which leads the policy to converge in a more local and conservative manner.
 As a result, the constraints are well satisfied, but the reward performance can converge to a lower level.
 % This is a common trade-off in constrained RL.
 In addition, as shown in Fig.~\ref{fig:point_goal_results_vertical1} (f) and Fig.~\ref{fig:point_goal_results_vertical2} (c) and (f), when comparing the values of the Lagrange multiplier, our proposed method satisfies the constraints, resulting in bounded values or decreasing trends.
@@ -77,7 +78,7 @@ An exception occurs when the cost limit is set to 0.5, which is particularly str
         \caption*{Cost return limit: 1}
     \end{minipage}
 
-    \caption{\textcolor{red}{Learning curves.} 
+    \caption{Learning curves.
     The left column, (a)–(c), illustrates the return, cost return, and Lagrange multiplier when the cost limit is set to 0.5. 
     The right column, (d)–(f), shows the corresponding results under a cost limit of 1.0. 
     Each row presents a different metric, showing how the return (top), cost return (middle), and Lagrange multiplier (bottom) evolve over training epochs.}
@@ -144,18 +145,14 @@ An exception occurs when the cost limit is set to 0.5, which is particularly str
         \caption*{Cost return limit: 2}
     \end{minipage}
 
-    \caption{\textcolor{red}{Learning curves.} 
+    \caption{Learning curves.
             The left column, (a)–(c), illustrates the return, cost return, and Lagrange multiplier when the cost limit is set to 1.5. 
             The right column, (d)–(f), shows the corresponding results under a cost limit of 2.0. 
             Each row presents a different metric, showing how the return (top), cost return (middle), and Lagrange multiplier (bottom) evolve over training epochs.}
     \label{fig:point_goal_results_vertical2}
 \end{figure}
 
-Here, the initial value of the Lagrange multiplier was set to 20, chosen empirically to accelerate convergence.
-Unlike PPO Lagrangian and CPPO PID, which impose \textcolor{red}{constraints over cumulative costs across an episode} and therefore requires a single scalar multiplier, our method enforces state-wise costs and thus needs \textcolor{red}{state-varying} multipliers.  % TODO: cumulative costs, state-wise costs 복수형이 맞는지?
-\textcolor{red}{For our method, the state-wise multiplier values were averaged within each epoch for visualization.}
-
-\subsection{\textcolor{red}{Analysis on Lagrange Multiplier}}
+\subsection{Analysis on Lagrange Multiplier}
 
 % TODO: label 크기가 조금 작음. 별표도 작음.
 % TODO: 별표 부분이 다음 figure에서 보여진다는 것도 언급
@@ -188,7 +185,7 @@ Unlike PPO Lagrangian and CPPO PID, which impose \textcolor{red}{constraints ove
     \label{fig:point_goal_test_results_bc}
 \end{figure}
 
-\textcolor{red}{Figures}~\ref{fig:point_goal_test_results_a} and \ref{fig:point_goal_test_results_bc} present the evaluation results of the learned Lagrange multiplier network. 
+Figures~\ref{fig:point_goal_test_results_a} and \ref{fig:point_goal_test_results_bc} present the evaluation results of the learned Lagrange multiplier network. 
 The network takes the state as input and produces a state-wise Lagrange multiplier at each timestep.
 Figure~\ref{fig:point_goal_test_results_a} shows the per-step reward, cost, and the output of the network throughout a single episode.
 The output increases as the agent approaches obstacles and potential constraint violations, while decreasing toward zero when the agent remains in safe states, as observed from the green curve in the bottom subplot of Fig.~\ref{fig:point_goal_test_results_a}.
