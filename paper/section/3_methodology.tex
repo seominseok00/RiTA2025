@@ -32,14 +32,13 @@ In a CMDP, the set of feasible policies $\Pi_C$ is defined as:
         \Pi_C = \{ \pi \in \Pi: \forall i, J_{C_i}(\pi) \leq d_i \},
     \end{aligned}
 \end{equation}
-Specifically, the cost-based return for constraint $i$ is defined as:
+Specifically, the constraint function for constraint $i$ is defined as the expected cumulative discounted cost:
 \begin{equation} \label{eq:cost_return}
     J_{C_i}(\pi) = \mathbb{E}_{\tau \sim \pi}\!\left[\sum^\infty_{t = 0} \gamma^t C_i(s_t, a_t)\right], 
     \quad \forall i \in \{1, \ldots, m\}.
 \end{equation}
-This definition parallels the expected return $J_R(\pi)$ in standard RL (Eq.~\ref{eq:mdp_optimization_problem}).
-In standard RL, the objective is to sove an optimization problem that maximizes the expected return, as defined in Eq.~\eqref{eq:mdp_optimization_problem}.
-Whereas constrained RL solves the following constrained optimization problem:
+In standard RL, the objective is an unconstrained policy optimization problem that aims to find a policy maximizing the expected return, as defined in Eq.~\eqref{eq:mdp_optimization_problem}.
+Whereas constrained RL solves a policy optimization problem that maximizes the expected return subject to the cost constraints defined in Eq.~\eqref{eq:cost_return}.
 \begin{equation} \label{eq:cmdp_optimization_problem}
     \pi^* = \arg\max_\pi J_R(\pi) \; \text{s. t.} \; J_{C_i}(\pi) \leq d_i, \; \forall i \in {1, \ldots, m}.
 \end{equation}
@@ -72,6 +71,7 @@ In this formulation, the state-wise constraint is defined as:
 % TODO: cost 계산만 다르게 할거면 그림은 통일
 % TODO: 그림 quality가 낮음
 % TODO: caption의 설명을 어디서 할건지? 지금까지 설명한 내용으로 충분하지 않은가요?
+
 \begin{figure}[H]
     \centering
 
@@ -88,9 +88,9 @@ In this formulation, the state-wise constraint is defined as:
         \includegraphics[width=\linewidth]{figure/statewise-constrained-rl.pdf}
         \caption{State-wise constrained RL}
     \end{subfigure}
-    \caption{\textcolor{red}{Comparison of constrained RL and state-wise constrained RL. 
-            In constrained RL, the agent is feasible if the cumulative cost is below the limit, 
-            while in state-wise constrained RL, a violation occurs if the cost at any single state exceeds the limit.}}
+    \caption{\textcolor{red}{Comparison of constrained RL and state-wise constrained RL.
+                            In constrained RL, a policy is feasible if the cumulative cost is below the limit.
+                            In state-wise constrained RL, a policy is feasible if the cost at every state is below the limit.}}
 \end{figure}
 
 
@@ -120,15 +120,15 @@ where $\eta_\theta, \eta_\lambda > 0$ are step sizes, and $[\cdot]_+$ denotes th
 % PPO Lagrangian
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Formulations of PPO under MDP, CMDP, and SCMDP}
+\subsection{Formulations of PPO under MDP and CMDP}
 
 \paragraph{PPO}
 
-Among policy gradient methods, PPO is one of the most widely used algorithms, originally proposed to solve the optimization problem in Eq.~\ref{eq:mdp_optimization_problem}.
+Among policy gradient methods, PPO is one of the most widely used algorithms, proposed to solve the optimization problem in Eq.~\ref{eq:mdp_optimization_problem}.
 To improve stability, PPO introduces a clipping mechanism that prevents large policy updates.
 The objective function of PPO is defined as:
 \begin{equation} \label{eq:ppo_objective}
-    J^{\text{PPO}}_R(\theta) = \mathbb{E}_{\pi_{\theta_\text{old}}} \left[ \min \left( r(\theta) A^{\pi_{\theta_\text{old}}}(s, a), \text{clip}(r(\theta), 1 - \epsilon, 1 + \epsilon) A^{\pi_{\theta_\text{old}}}(s, a) \right) \right]
+    J^{\text{PPO}}(\theta) = \mathbb{E}_{\pi_{\theta_\text{old}}} \left[ \min \left( r(\theta) A^{\pi_{\theta_\text{old}}}(s, a), \text{clip}(r(\theta), 1 - \epsilon, 1 + \epsilon) A^{\pi_{\theta_\text{old}}}(s, a) \right) \right]
 \end{equation}
 where $r(\theta) = \frac{\pi_\theta(a|s)}{\pi_{\theta_\text{old}}(a|s)}$ denotes the probability ratio between the current and the old policies, and $A^{\pi_{\theta_\text{old}}}(s, a) = Q^{\pi_{\theta_\text{old}}}(s, a) - V^{\pi_{\theta_\text{old}}}(s)$ represents the advantage function under the old policy.
 
@@ -162,7 +162,7 @@ where $\lambda \geq 0$ is the Lagrange multiplier that imposes a penalty on cons
     \includegraphics[width=0.8\linewidth]{figure/ppo_lagnet.pdf}
     \caption{Overview of the proposed method.
             Unlike standard PPO-Lagrangian, which employs a scalar Lagrange multiplier due to the constraint being defined on cumulative cost, our approach imposes constraints in a state-wise manner, requiring state-varying multipliers. 
-            To estimate these multipliers, we introduce an additional neural network, termed the Lagrange Multiplier Network.}
+            To estimate these multipliers, we introduce an additional neural network, termed the Lagrange multiplier network.}
     \label{fig:ppo_lagnet}
 \end{figure}
 
@@ -170,8 +170,8 @@ where $\lambda \geq 0$ is the Lagrange multiplier that imposes a penalty on cons
 % TODO: PPO Lagrangian과의 차이를 명확히 언급 (단순히 NN을 썼다고 한 것만으로는 불충분)
 In this paper, we propose a method that extends \textcolor{red}{PPO Lagrangian} to the state-wise constrained RL setting by estimating state-wise Lagrange multipliers.
 Similar to PPO Lagrangian in Eq.~\ref{eq:ppo_lagrangian_objective}, which employs a scalar Lagrange multiplier to handle constraints on the cumulative cost, addressing the state-wise constraint defined in Eq.~\ref{eq:statewise_cost_return} requires a state-varying multiplier.
-To this end, we introduce an additional neural network, referred to as the Lagrange multiplier network, that takes the state as input and outputs the corresponding Lagrange multiplier, as illustrated in Fig.~\ref{fig:ppo_lagnet}.
-The Lagrange multiplier network is parameterized by $\xi$ and takes the state $s$ as input, outputting the corresponding Lagrange multiplier $\lambda_\xi(s)$.
+To this end, we introduce an additional neural network, referred to as the Lagrange multiplier network, which maps a state to its corresponding Lagrange multiplier, as illustrated in Fig.~\ref{fig:ppo_lagnet}.
+Formally, the Lagrange multiplier network is parameterized by $\xi$ and is denoted as $\lambda_\xi(s)$.
 This allows the application of Lagrangian relaxation to the constrained policy optimization defined in Eq.~\ref{eq:scmdp_optimization_problem}, analogous to the way PPO-Lagrangian handles cumulative cost constraints.
 The objective function of the proposed method can thus be expressed as:
 \begin{equation} 
@@ -184,5 +184,5 @@ The parameters of the Lagrange multiplier network are updated using the followin
 \begin{equation} \label{eq:lagrange_multiplier_update}
     J_\lambda(\xi) = \mathbb{E}_{(s_t, a_t, s_{t + 1}) \sim \tau, \tau \sim \pi_{\theta_\text{old}}} [\lambda_\xi(s_t) (C(s_t, a_t, s_{t + 1}) - w)]
 \end{equation}
-where $w$ denotes the state-wise constraint limit. 
+where $w$ denotes the state-wise cost limit. 
 In this formulation, the objective $J_\lambda(\xi)$ drives the multiplier $\lambda_\xi(s)$ to increase when the observed cost $C(s_t, a_t, s_{t+1})$ exceeds the limit $w$, and to decrease when it falls below $w$.

@@ -4,14 +4,11 @@ In this work, we proposed a method that introduces state-wise Lagrange multiplie
 Unlike most existing approaches that address constraints based on cumulative costs, our method handles state-wise constraints, which inherently require state-dependent multipliers.
 To this end, neural networks are employed to approximate these multipliers, enabling the policy to more effectively satisfy constraints at the level of individual states.
 The proposed approach allows constraints to be specified more finely and demonstrates consistent satisfaction of them.
-Moreover, the learned Lagrange multiplier network can also be utilized at deployment time to assess state-wise safety, thereby providing interpretability and insight into the agent’s behavior.
+Moreover, the learned Lagrange multiplier network can also be utilized at deployment to assess state-wise safety, thereby providing interpretability and insight into the agent’s behavior.
 
-Building on the current findings, we identify several directions for future research.
-First, in our current approach, learning a safe policy inherently involves constraint violations during training, and even after convergence, deterministic satisfaction of the constraints cannot be strictly guaranteed. 
-To provide deterministic safety guarantees, one possible direction is to leverage the learned Lagrange multiplier network to assess the current state and, when a risky state is detected, employ additional mechanisms such as safety filters or control barrier functions to block unsafe actions.
-Second, since PPO is an on-policy algorithm, its data efficiency is inherently lower than that of off-policy methods.
-This limitation becomes particularly critical in tasks where learning must be performed in real-world environments.
-A promising direction to address this issue is to explore extensions toward more sample-efficient approaches, such as adopting off-policy algorithms or incorporating model-based methods.
+Building on the current findings, future research could focus on two directions.
+One is to pursue deterministic safety guarantees, for instance by leveraging the learned Lagrange multiplier network together with mechanisms such as safety filters or control barrier functions.
+Another important direction is to improve sample efficiency, for example through off-policy or model-based approaches.
 
-Despite these limitations, our findings highlight the potential of state-wise constrained RL and demonstrate that our approach provides a promising foundation for developing safer and more interpretable RL agents. 
-We hope this work will inspire further research on bridging theoretical safety guarantees and practical RL applications.
+This work demonstrates the potential of state-wise constrained RL and indicates that our approach could provide a promising foundation for developing safer and more interpretable RL agents.
+These contributions are expected to inspire further research on bridging theoretical safety guarantees and practical RL applications.
