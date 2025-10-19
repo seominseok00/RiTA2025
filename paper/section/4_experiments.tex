@@ -10,8 +10,10 @@ Figures~\ref{fig:point_goal_results_vertical1} and \ref{fig:point_goal_results_v
 Each figure shows how return, cost return, and the Lagrange multiplier evolve during training, highlighting how varying cost limits affect the agent's performance and constraint satisfaction.
 Since all methods except ours define the constraint in terms of cumulative cost, the threshold for our method was set to 1/1000 of theirs (as each episode consists of 1,000 steps).
 From Fig.~\ref{fig:point_goal_results_vertical1} (e) and Fig.~\ref{fig:point_goal_results_vertical2} (b), (e), it can be observed that our proposed method consistently satisfies the constraints across different settings, unlike the other methods.
-When the constraint is enforced too strictly to be satisfied, as in Fig.~\ref{fig:point_goal_results_vertical1} (b), none of the methods can satisfy it, but our proposed method still achieves the lowest cost return among them.
-In particular, as shown in Fig.~\ref{fig:point_goal_results_vertical1} (a) and (b), our method achieves a similar level of constraint satisfaction as CPO, while obtaining more than twice the return performance.
+%%% 수정 필요
+When the constraint is enforced too strictly to be satisfied, as in Fig.~\ref{fig:point_goal_results_vertical1} (b), \textcolor{red}{none of the methods can fully satisfy it, but our proposed method and CPO come closest to meeting the constraint, achieving much lower cost returns than the others.}
+In particular, as shown in Fig.~\ref{fig:point_goal_results_vertical1} (a) and (b), our method achieves a similar level of constraint satisfaction as CPO, while obtaining \textcolor{red}{approximately 1.8 times higher} return performance.  % 2배 언급 수정
+%%%
 However, Fig.~\ref{fig:point_goal_results_vertical1} (d) suggests that the reward performance can be lower than that of some of the other methods.
 This is due to the use of state-wise cost constraints in our method, unlike the compared approaches that enforce constraints defined on cumulative cost return, which leads the policy to converge in a more local and conservative manner.
 As a result, the constraints are well satisfied, but the reward performance can converge to a lower level.
