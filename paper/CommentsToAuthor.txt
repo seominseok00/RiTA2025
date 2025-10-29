@@ -1,0 +1,21 @@
+Comments to author (Associate Editor)
+=====================================
+
+This paper is professionally prepared and proposes
+extending Lagrangian-based constrained RL. My detailed
+comments are as follows:
+1. Clarify and align the SCMDP problem statement with the
+implemented objective and the evaluation metric. It seems
+there is inconsistency in SCMDP formulation.
+2. The authors should also pay attention to the notations,
+to make sure they are consistent throughout the entire
+paper.
+3. The authors may also consider provide a brief
+theoretical discussion on existence of saddle points with
+state-dependent multipliers and function approximation.
+
+
+----------------------------------------
+Comments on Video Attachment:
+
+[None found]

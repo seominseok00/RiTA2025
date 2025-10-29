@@ -1,22 +1,25 @@
 \section{Experiments}
 
 We evaluate our approach in the Safety Gymnasium \cite{ji2023safety} environment, focusing on the \texttt{PointGoal} task under different cost limits.
-Safety Gymnasium provides two cost definitions, a binary indicator and object-specific values, and the object-specific cost (\texttt{constrain\_indicator=False}) is adopted in all experiments.
-The proposed approach is evaluated in terms of constraint satisfaction performance by comparing it with CPO \cite{achiam2017constrained}, PPO Lagrangian \cite{ray2019benchmarking}, IPO \cite{liu2020ipo}, and CPPO \cite{stooke2020responsive}, using the implementations provided by Omnisafe \cite{ji2024omnisafe}.
+\textcolor{red}{Safety Gymnasium provides two types of cost definitions: a binary indicator and object-specific values.}
+\textcolor{red}{In all experiments, we adopt the object-specific cost (\texttt{constrain\_indicator=False}).}
+% \textcolor{red}{As in the previous sections, we consider a single-constraint setting for all experiments.}
+The proposed \textcolor{red}{method} is evaluated in terms of constraint satisfaction performance \textcolor{red}{and reward performance} by comparing it with CPO \cite{achiam2017constrained}, PPO Lagrangian \cite{ray2019benchmarking}, IPO \cite{liu2020ipo}, and CPPO \cite{stooke2020responsive}, using the implementations provided by Omnisafe \cite{ji2024omnisafe}.
 
 \subsection{Results}
 
 Figures~\ref{fig:point_goal_results_vertical1} and \ref{fig:point_goal_results_vertical2} present the results under different cost limits.
-Each figure shows how return, cost return, and the Lagrange multiplier evolve during training, highlighting how varying cost limits affect the agent's performance and constraint satisfaction.
+Each figure \textcolor{red}{illustrates} how return, cost return, and the Lagrange multiplier evolve during training, highlighting how varying cost limits affect the agent's performance and constraint satisfaction.
 Since all methods except ours define the constraint in terms of cumulative cost, the threshold for our method was set to 1/1000 of theirs (as each episode consists of 1,000 steps).
 From Fig.~\ref{fig:point_goal_results_vertical1} (e) and Fig.~\ref{fig:point_goal_results_vertical2} (b), (e), it can be observed that our proposed method consistently satisfies the constraints across different settings, unlike the other methods.
 %%% 수정 필요
-When the constraint is enforced too strictly to be satisfied, as in Fig.~\ref{fig:point_goal_results_vertical1} (b), \textcolor{red}{none of the methods can fully satisfy it, but our proposed method and CPO come closest to meeting the constraint, achieving much lower cost returns than the others.}
+When the constraint is enforced too strictly to be satisfied, as in Fig.~\ref{fig:point_goal_results_vertical1} (b), \textcolor{red}{none of the methods can fully satisfy it, but our proposed method and CPO come closest to satisfying the constraint, achieving much lower cost returns than the others.}
+% none of the methods can satisfy it, but our proposed method still achieves the lowest cost return among them.
 In particular, as shown in Fig.~\ref{fig:point_goal_results_vertical1} (a) and (b), our method achieves a similar level of constraint satisfaction as CPO, while obtaining \textcolor{red}{approximately 1.8 times higher} return performance.  % 2배 언급 수정
 %%%
-However, Fig.~\ref{fig:point_goal_results_vertical1} (d) suggests that the reward performance can be lower than that of some of the other methods.
-This is due to the use of state-wise cost constraints in our method, unlike the compared approaches that enforce constraints defined on cumulative cost return, which leads the policy to converge in a more local and conservative manner.
-As a result, the constraints are well satisfied, but the reward performance can converge to a lower level.
+\textcolor{red}{However, Fig.~\ref{fig:point_goal_results_vertical1} (d) suggests that the reward performance can be lower than that of some of the other methods.}
+\textcolor{red}{This is because our method applies state-wise cost constraints, unlike the baseline approaches that enforce constraints on the cumulative cost return.}
+As a result, the policy tends to converge in a more local and conservative manner, which leads to well-satisfied constraints but potentially lower return performance.
 % This is a common trade-off in constrained RL.
 In addition, as shown in Fig.~\ref{fig:point_goal_results_vertical1} (f) and Fig.~\ref{fig:point_goal_results_vertical2} (c) and (f), when comparing the values of the Lagrange multiplier, our proposed method satisfies the constraints, resulting in bounded values or decreasing trends.
 An exception occurs when the cost limit is set to 0.5, which is particularly strict and difficult to satisfy, leading to continuously increasing values.
@@ -190,5 +193,5 @@ An exception occurs when the cost limit is set to 0.5, which is particularly str
 Figures~\ref{fig:point_goal_test_results_a} and \ref{fig:point_goal_test_results_bc} present the evaluation results of the learned Lagrange multiplier network. 
 The network takes the state as input and produces a state-wise Lagrange multiplier at each timestep.
 Figure~\ref{fig:point_goal_test_results_a} shows the per-step reward, cost, and the output of the network throughout a single episode.
-The output increases as the agent approaches obstacles and potential constraint violations, while decreasing toward zero when the agent remains in safe states, as observed from the green curve in the bottom subplot of Fig.~\ref{fig:point_goal_test_results_a}.
+The output increases as the agent approaches obstacles \textcolor{red}{or} potential constraint violations, while decreasing toward zero when the agent remains in safe states, as \textcolor{red}{as shown by} the green curve in the bottom subplot of Fig.~\ref{fig:point_goal_test_results_a}.
 Figure~\ref{fig:point_goal_test_results_bc} shows simulation frames corresponding to the two starred timesteps in Fig.~\ref{fig:point_goal_test_results_a}: the black star corresponds to subfigure (a), where the agent violates the constraint and the multiplier reaches its maximum value, while the white star corresponds to subfigure (b), where the agent remains in a safe state and the output stays close to zero.
