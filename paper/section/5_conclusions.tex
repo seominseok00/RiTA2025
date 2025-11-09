@@ -3,13 +3,13 @@
 In this work, we proposed a method that introduces state-wise Lagrange multipliers to learn policies that satisfy constraints defined in terms of state-wise costs.
 Unlike most existing approaches that address constraints based on cumulative costs, our method handles state-wise constraints, which inherently require state-dependent multipliers.
 To this end, neural networks are employed to approximate these multipliers, enabling the policy to more effectively satisfy constraints at the level of individual states.
-\textcolor{red}{The proposed approach allows for finer specification of constraints and demonstrates consistent satisfaction across experiments.}
+The proposed approach allows for finer specification of constraints and demonstrates consistent satisfaction across experiments.
 Moreover, the learned Lagrange multiplier network can also be utilized at deployment to assess state-wise safety, thereby providing interpretability and insight into the agent’s behavior.
 
-Building on \textcolor{red}{these} findings, future research could focus on \textcolor{red}{several} directions.
-One \textcolor{red}{direction} is to pursue deterministic safety guarantees, for instance by leveraging the learned Lagrange multiplier network together with mechanisms such as safety filters or control barrier functions.
+Building on these findings, future research could focus on several directions.
+One direction is to pursue deterministic safety guarantees, for instance by leveraging the learned Lagrange multiplier network together with mechanisms such as safety filters or control barrier functions.
 Another important direction is to improve sample efficiency, for example through off-policy or model-based approaches.
-\textcolor{red}{Additionally, we plan to provide a theoretical discussion on the existence of saddle points, particularly in the context of state-dependent multipliers and function approximation.}
+Additionally, we plan to provide a theoretical discussion on the existence of saddle points, particularly in the context of state-dependent multipliers and function approximation.
 
-\textcolor{red}{Overall, this work demonstrates the potential of state-wise constrained RL and suggests that our approach provides a promising foundation for developing safer and more interpretable RL agents.}
+Overall, this work demonstrates the potential of state-wise constrained RL and suggests that our approach provides a promising foundation for developing safer and more interpretable RL agents.
 These contributions are expected to inspire further research on bridging theoretical safety guarantees and practical RL applications.

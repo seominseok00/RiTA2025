@@ -43,12 +43,12 @@ The objective of RL is to find an optimal policy $\pi^*$ that maximizes the cumu
         \pi^* &= \arg \max J_R(\pi)
     \end{aligned}
 \end{equation}
-Here, $\tau = (s_0, a_0, s_1, a_1, \ldots)$ denotes a trajectory \textcolor{red}{under} policy $\pi$.
+Here, $\tau = (s_0, a_0, s_1, a_1, \ldots)$ denotes a trajectory under policy $\pi$.
 
 \paragraph{\textbf{Constrained Markov Decision Processes}}
 
 In contrast, constrained RL is typically formulated as a constrained Markov decision process (CMDP) \cite{altman2021constrained}.
-\textcolor{red}{A CMDP extends an MDP by introducing cost functions $C_1, \ldots, C_m$ (separate from the reward function) and their corresponding limits $d_1, \ldots, d_m$.}
+A CMDP extends an MDP by introducing cost functions $C_1, \ldots, C_m$ (separate from the reward function) and their corresponding limits $d_1, \ldots, d_m$.
 Formally, a CMDP is defined as a tuple $\langle S, A, P, R, C, d, \gamma \rangle$.
 In a CMDP, the set of feasible policies $\Pi_C$ is defined as:
 \begin{equation} \label{eq:feasible_policy_set_cmdp}
@@ -61,7 +61,7 @@ Specifically, the constraint function for constraint $i$ is defined as the expec
     J_{C_i}(\pi) = \mathbb{E}_{\tau \sim \pi}\!\left[\sum^\infty_{t = 0} \gamma^t C_i(s_t, a_t)\right], 
     \quad \forall i \in \{1, \ldots, m\}.
 \end{equation}
-In standard RL, the objective is an unconstrained policy optimization problem that aims to find a policy maximizing the expected return, as defined in Eq.~\eqref{eq:mdp_optimization_problem}, \textcolor{red}{whereas constrained RL seeks to maximize the expected return subject to the cost constraints defined in Eq.~\eqref{eq:cost_return}.}
+In standard RL, the objective is an unconstrained policy optimization problem that aims to find a policy maximizing the expected return, as defined in Eq.~\eqref{eq:mdp_optimization_problem}, whereas constrained RL seeks to maximize the expected return subject to the cost constraints defined in Eq.~\eqref{eq:cost_return}.
 \begin{equation} \label{eq:cmdp_optimization_problem}
     \pi^* = \arg\max_\pi J_R(\pi) \; \text{s. t.} \; \pi \in \Pi_C.
 \end{equation}
@@ -69,8 +69,8 @@ In standard RL, the objective is an unconstrained policy optimization problem th
 
 \paragraph{\textbf{State-wise Constrained Markov Decision Process}}
 
-The CMDP framework can be extended to \textcolor{red}{incorporate cost-based constraints of different forms.}
-One such extension is the state-wise constrained Markov decision process (SCMDP) \cite{zhao2023state}, which \textcolor{red}{enforces constraints that bound the expected cost at each state by a specified threshold.}
+The CMDP framework can be extended to incorporate cost-based constraints of different forms.
+One such extension is the state-wise constrained Markov decision process (SCMDP) \cite{zhao2023state}, which enforces constraints that bound the expected cost at each state by a specified threshold.
 In a SCMDP, the set of feasible policies $\Pi_{SC}$ is defined as:
 \begin{equation} \label{eq:feasible_policy_set_scmdp}
     \begin{aligned}    
@@ -86,8 +86,8 @@ Consequently, similar to CMDP, the optimization problem in SCMDP can be formulat
 \begin{equation} \label{eq:scmdp_optimization_problem}
     \pi^* = \arg\max_\pi J_R(\pi) \; \text{s.t.} \; \pi \in \Pi_{SC}.
 \end{equation}  % refrence: https://arxiv.org/pdf/2306.12594
-\textcolor{red}{In a CMDP, constraints are imposed on the cumulative cost, whereas an SCMDP enforces constraints on the expected cost at each state.}
-\textcolor{red}{This enables safety guarantees at the state level, as illustrated in Fig.~\ref{fig:constrained_rl_vs_statewise_constrained_rl}.}
+In a CMDP, constraints are imposed on the cumulative cost, whereas an SCMDP enforces constraints on the expected cost at each state.
+This enables safety guarantees at the state level, as illustrated in Fig.~\ref{fig:constrained_rl_vs_statewise_constrained_rl}.
 % TODO: cost 계산만 다르게 할거면 그림은 통일
 % TODO: 그림 quality가 낮음
 % TODO: caption의 설명을 어디서 할건지? 지금까지 설명한 내용으로 충분하지 않은가요?
@@ -117,7 +117,7 @@ Consequently, similar to CMDP, the optimization problem in SCMDP can be formulat
 
 \subsubsection{Lagrangian Relaxation for Constrained Policy Optimization} \label{subsubsec:lagrangian_relaxation}
 
-A common approach to solve constrained optimization problems is \textcolor{red}{to use the Lagrangian relaxation method.}
+A common approach to solve constrained optimization problems is to use the Lagrangian relaxation method.
 In this approach, the constrained optimization problem \eqref{eq:cmdp_optimization_problem} is reformulated as an unconstrained optimization problem by introducing Lagrange multiplier $\lambda \geq 0$ that penalizes constraint violations.
 The resulting Lagrangian can be written as:
 \begin{equation}
@@ -128,7 +128,7 @@ The objective is then to find a saddle point $(\theta^*, \lambda^*)$ that satisf
 \begin{equation}
     L(\theta^*, \lambda) \geq L(\theta^*, \lambda^*) \geq L(\theta, \lambda^*).
 \end{equation}
-Since finding a global saddle point is \textcolor{red}{typically} intractable, in practice, one seeks a locally optimal solution by iteratively updating the policy parameters and the Lagrange multipliers.
+Since finding a global saddle point is typically intractable, in practice, one seeks a locally optimal solution by iteratively updating the policy parameters and the Lagrange multipliers.
 A common approach is to apply gradient-based updates of the form
 \begin{align}
     \theta_{n+1} &= \theta_n + \eta_\theta \nabla_\theta \Big(J_R(\pi_\theta) - \lambda_n^\top J_C(\pi_\theta)\Big), \\
@@ -155,16 +155,16 @@ where $r(\theta) = \frac{\pi_\theta(a|s)}{\pi_{\theta_\text{old}}(a|s)}$ denotes
 \paragraph{\textbf{PPO Lagrangian}}
 
 PPO Lagrangian extends PPO to the constrained RL setting, allowing the algorithm to handle explicit constraints.
-The original PPO algorithm enhances stability by limiting policy updates through clipping, as defined in Eq.~\eqref{eq:ppo_objective}, but it does not \textcolor{red}{explicitly account for constraints.}
+The original PPO algorithm enhances stability by limiting policy updates through clipping, as defined in Eq.~\eqref{eq:ppo_objective}, but it does not explicitly account for constraints.
 To address constraints defined in terms of the cumulative cost in Eq.~\eqref{eq:cost_return}, PPO Lagrangian applies the Lagrangian relaxation technique, as discussed in Section~\ref{subsubsec:lagrangian_relaxation}, thereby converting the constrained optimization problem in Eq.~\eqref{eq:cmdp_optimization_problem} into an unconstrained one.
-\textcolor{red}{For simplicity, we consider a single-constraint case throughout this paper, although the original formulation supports multiple constraints.}
+For simplicity, we consider a single-constraint case throughout this paper, although the original formulation supports multiple constraints.
 \begin{equation} \label{eq:ppo_lagrangian_objective}
     \begin{aligned} J^{\text{PPO-Lag}}(\theta)
         = \mathbb{E}_{\pi_{\theta_\text{old}}} \Big[ &\min \big( r(\theta) A^{\pi_{\theta_\text{old}}}_R (s, a), \text{clip}(r(\theta), 1 - \epsilon, 1 + \epsilon) A^{\pi_{\theta_\text{old}}}_R (s, a) \big)
         \\ &- \lambda r(\theta) A^{\pi_{\theta_\text{old}}}_C (s, a) \Big]
     \end{aligned}
 \end{equation}
-where $\lambda \geq 0$ is the Lagrange multiplier that imposes a penalty on constraint violations, and \textcolor{red}{$A^{\pi_{\theta_\text{old}}}_C(s, a) = Q^{\pi_{\theta_\text{old}}}_C(s, a) - V^{\pi_{\theta_\text{old}}}_C(s)$ denotes the \textit{cost advantage function} under the old policy.}
+where $\lambda \geq 0$ is the Lagrange multiplier that imposes a penalty on constraint violations, and $A^{\pi_{\theta_\text{old}}}_C(s, a) = Q^{\pi_{\theta_\text{old}}}_C(s, a) - V^{\pi_{\theta_\text{old}}}_C(s)$ denotes the \textit{cost advantage function} under the old policy.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -182,7 +182,7 @@ where $\lambda \geq 0$ is the Lagrange multiplier that imposes a penalty on cons
 
     \includegraphics[width=0.8\linewidth]{figure/ppo_lagnet.pdf}
     \caption{Overview of the proposed method.
-            Unlike standard PPO-Lagrangian, which employs a scalar Lagrange multiplier \textcolor{red}{since} the constraint is defined on cumulative cost, our approach imposes constraints in a state-wise manner, requiring state-varying multipliers. 
+            Unlike standard PPO-Lagrangian, which employs a scalar Lagrange multiplier since the constraint is defined on cumulative cost, our approach imposes constraints in a state-wise manner, requiring state-varying multipliers. 
             To estimate these multipliers, we introduce an additional neural network, termed the Lagrange multiplier network.}
     \label{fig:ppo_lagnet}
 \end{figure}
@@ -191,7 +191,7 @@ where $\lambda \geq 0$ is the Lagrange multiplier that imposes a penalty on cons
 % TODO: PPO Lagrangian과의 차이를 명확히 언급 (단순히 NN을 썼다고 한 것만으로는 불충분)
 In this paper, we propose a method that extends PPO Lagrangian to the state-wise constrained RL setting by estimating state-wise Lagrange multipliers.
 Similar to PPO Lagrangian in Eq.~\eqref{eq:ppo_lagrangian_objective}, which employs a scalar Lagrange multiplier to handle constraints on the cumulative cost, addressing the state-wise constraint defined in Eq.~\eqref{eq:statewise_cost_return} requires a state-varying multiplier.
-To this end, we introduce an additional neural network, referred to as the Lagrange multiplier network, which maps \textcolor{red}{each} state to its corresponding Lagrange multiplier, as illustrated in Fig.~\ref{fig:ppo_lagnet}.
+To this end, we introduce an additional neural network, referred to as the Lagrange multiplier network, which maps each state to its corresponding Lagrange multiplier, as illustrated in Fig.~\ref{fig:ppo_lagnet}.
 Formally, the Lagrange multiplier network is parameterized by $\xi$ and is denoted as $\lambda_\xi(s)$.
 This enables the application of Lagrangian relaxation to the constrained policy optimization defined in Eq.~\eqref{eq:scmdp_optimization_problem}, analogous to the way PPO-Lagrangian handles cumulative cost constraints.
 The objective function of the proposed method can thus be expressed as:
@@ -206,4 +206,4 @@ The parameters of the Lagrange multiplier network are updated using the followin
     J_\lambda(\xi) = \mathbb{E}_{(s_t, a_t, s_{t + 1}) \sim \tau, \tau \sim \pi_{\theta_\text{old}}} [\lambda_\xi(s_t) (C(s_t, a_t, s_{t + 1}) - w)]
 \end{equation}
 where $w$ denotes the state-wise cost limit.  % ! 여기서도 w로 표기했는데, 이럴 경우 설명의 편의를 위해 constraint가 하나라고 언급하는 방향으로 수정하는게 좋을듯?
-In this formulation, the objective $J_\lambda(\xi)$ \textcolor{red}{encourages} the multiplier $\lambda_\xi(s)$ to increase when the observed cost $C(s_t, a_t, s_{t+1})$ exceeds the limit $w$, and to decrease when it falls below $w$.
+In this formulation, the objective $J_\lambda(\xi)$ encourages the multiplier $\lambda_\xi(s)$ to increase when the observed cost $C(s_t, a_t, s_{t+1})$ exceeds the limit $w$, and to decrease when it falls below $w$.
