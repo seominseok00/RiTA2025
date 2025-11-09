@@ -21,8 +21,6 @@ In particular, as shown in Fig.~\ref{fig:point_goal_results_vertical1} (a) and (
 \textcolor{red}{This is because our method applies state-wise cost constraints, unlike the baseline approaches that enforce constraints on the cumulative cost return.}
 As a result, the policy tends to converge in a more local and conservative manner, which leads to well-satisfied constraints but potentially lower return performance.
 % This is a common trade-off in constrained RL.
-In addition, as shown in Fig.~\ref{fig:point_goal_results_vertical1} (f) and Fig.~\ref{fig:point_goal_results_vertical2} (c) and (f), when comparing the values of the Lagrange multiplier, our proposed method satisfies the constraints, resulting in bounded values or decreasing trends.
-An exception occurs when the cost limit is set to 0.5, which is particularly strict and difficult to satisfy, leading to continuously increasing values.
 
 \begin{figure}[H]
     \centering
@@ -156,6 +154,9 @@ An exception occurs when the cost limit is set to 0.5, which is particularly str
             Each row presents a different metric, showing how the return (top), cost return (middle), and Lagrange multiplier (bottom) evolve over training epochs.}
     \label{fig:point_goal_results_vertical2}
 \end{figure}
+
+In addition, as shown in Fig.~\ref{fig:point_goal_results_vertical1} (f) and Fig.~\ref{fig:point_goal_results_vertical2} (c) and (f), when comparing the values of the Lagrange multiplier, our proposed method satisfies the constraints, resulting in bounded values or decreasing trends.
+An exception occurs when the cost limit is set to 0.5, which is particularly strict and difficult to satisfy, leading to continuously increasing values.
 
 \subsection{Analysis on Lagrange Multiplier}
 

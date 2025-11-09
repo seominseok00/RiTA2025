@@ -1,3 +1,26 @@
+
+% ! Comment 1: Clarify and align the SCMDP problem statement with the implemented objective and the evaluation metric.
+% ! => implemented objective에서는 advantage로 정의했는데, evaluation metric에서는 return, cost return으로 정의해서 그런듯.
+% ! => objective에서는 state-wise cost로 정의했는데 evaluation metric에서는 cumulative cost로 정의
+
+
+% 이전 formulation에서는 reward로 정의했는데, objective에서는 advantage로 정의해서 그런듯. (게다가 advantage는 q function과 value function의 차이로 정의되는데, q function과 value function은 현재 상태로부터 앞으로 받을 return의 기댓값이므로(누적해서 발생한 값) SCMD formulation과 완전히 일치하지 않음 - SCMDP는 현재 상태에서 발생한 cost로 정의되므로)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ! Comment 2: The authors should also pay attention to the notations, to make sure they are consistent throughout the entire paper.
+
+% ! => formulation까지는 m개의 제약 조건을 기준으로 설명하다가 PPO Lagrangian, Proposed Method에서는 단일 제약 조건으로 설명해서 그런듯.
+
+% ! => w/w_i, lambda의 scalar/vector 표기
+% ! => PPO Lagrangian과 Proposed method의 objective에서 cost advantage를 모두 A_c로 표기
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% ! Comment 3: The authors may also consider provide a brief theoretical discussion on existence of saddle points with state-dependent multipliers and function approximation.
+
+
+
 \section{Methodology}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
